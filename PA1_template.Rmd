@@ -1,22 +1,70 @@
----
-title: "Reproducible Research: Peer Assessment 1"
-output: 
-  html_document:
-    keep_md: true
----
+"Reproducible Research: Peer Assessment 1"
+===============================================
+
+
+
+## Basic settings
+```{r}
+setwd("~/Documents/ProgramsGitHub/RepData_PeerAssessment1")
+echo = TRUE  # Always make code visible
+library(ggplot2) # graphic library
+library(scales)  # graph - to be able to use date breaks
+```
+
 
 
 ## Loading and preprocessing the data
-
+```{r}
+unzip("activity.zip")        # unzipping the data
+data <- read.csv("activity.csv", colClasses = c("integer", "Date", "factor"))     # loading the data 
+head(data)                   # few lines of data
+dim(data)                    # dimension of the data
+```
 
 
 ## What is mean total number of steps taken per day?
 
+In this part of the analysis we are not going to consider the missing values
+```{r}
+datawithoutNA <- na.omit(data)                      # new data without NA 
+rownames(datawithoutNA)<-1:nrow(datawithoutNA)      # renumering the new data 
+head(datawithoutNA)                                 # few lines of new data
+dim(datawithoutNA)                                  # dimension of the new data
+```
 
+We contruct an histogram of the total number of steps taken per day:
+```{r}
+g <- ggplot(datawithoutNA,aes(date,steps))          # data to be use
+g + geom_histogram(stat="identity") + labs(title = "Histogram of Total Number of Steps Taken Per Day", x = "Date", y = "Total number of steps") +scale_x_date(limits=c(as.Date("2012-10-02"),as.Date("2012-11-29")),breaks = date_breaks("week"),labels = date_format("%d-%b"))   # histogram / labels / breaks
+```
+
+We calculate the **mean** and **median** total number of steps taken per day
+```{r}
+totalstepsperday <- aggregate(datawithoutNA$steps, list(Date = datawithoutNA$date), sum)   #steps per day
+```
+
+```{r}
+mean(totalstepsperday$x)
+median(totalstepsperday$x)
+```
 
 ## What is the average daily activity pattern?
 
+We construct a time series plot of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis)
+```{r}
+averageperinterval<-aggregate(datawithoutNA$steps, list( interval= as.numeric(as.character(datawithoutNA$interval))), mean)                                            # Calculate the average 
+```
 
+```{r}
+g <- ggplot(averageperinterval,aes(interval,x))
+g + geom_line() + labs(title = "Time Series Plot of the 5-minute Interval", x = "5-minute intervals", y = "Average Number of Steps Taken")
+```
+
+The 5-minute interval, on average across all the days in the dataset, which contains the maximum number of steps is
+
+```{r}
+averageperinterval[averageperinterval$x == max(averageperinterval$x),]
+```
 
 ## Imputing missing values
 
