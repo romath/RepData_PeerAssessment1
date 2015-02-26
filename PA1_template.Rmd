@@ -151,3 +151,4 @@ names(avgsteps)[3] <- "average"                              # rename third colu
 ```{r}
 g <- ggplot(avgsteps,aes(interval,average))           # data to be use
 g + geom_line() + facet_wrap(~ weekdays,ncol=1) + labs(title = "Time Series Plot of the 5-minute Interval (weekday vs weekend)", x = "5-minute intervals", y = "Average Number of Steps Taken")  # graph / facets / labels
+```

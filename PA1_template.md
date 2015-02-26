@@ -11,13 +11,6 @@ We fixed a few settings to be use during this analysis:
 setwd("~/Documents/ProgramsGitHub/RepData_PeerAssessment1")  # working directory
 echo = TRUE      # Always make code visible
 library(ggplot2) # graph - library
-```
-
-```
-## Need help? Try the ggplot2 mailing list: http://groups.google.com/group/ggplot2.
-```
-
-```r
 library(scales)  # graph - to be able to use date breaks
 library(plyr)    # to be able to use join
 ```
